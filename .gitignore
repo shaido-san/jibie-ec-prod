@@ -10,6 +10,10 @@ env/
 # Django関連
 db.sqlite3
 media/
+staticfiles/
+
+# ログファイル関連
+logs/
 
 # IDE関連
 .vscode/
