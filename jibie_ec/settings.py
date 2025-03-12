@@ -100,8 +100,8 @@ AUTH_USER_MODEL = "base.User"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # ✅ セキュリティ設定
-SESSION_COOKIE_SECURE = not DEBUG  # HTTPS のみでセッションを保持
-CSRF_COOKIE_SECURE = not DEBUG  # HTTPS のみで CSRF トークンを送信
+SESSION_COOKIE_SECURE = False  # 本番環境では絶対True
+CSRF_COOKIE_SECURE = False  # 同じく
 X_FRAME_OPTIONS = "DENY"  # クリックジャッキング対策
 
 # ✅ メール設定（注文確認メール用）
