@@ -12,12 +12,17 @@ class OrderItemAdmin(admin.ModelAdmin):
     list_display = ("order", "item", "quantity", "subtotal_price")  # 一覧表示
     list_filter = ("order",)  # 注文ごとにフィルタリング
     search_fields = ("item__name",)  # 商品名で検索
-class StockInLine(admin.StackedInline):
+
+class StockInline(admin.TabularInline):  # ← Stacked から Tabular に変更
     model = Stock
-    extra = 1
+    extra = 1                # 追加フォームは0個（余計なの表示させない）
+    max_num = 1              # 在庫は1つしか作れないようにする
+    can_delete = False       # 削除ボタンも出さない（誤操作防止）
+
+
 class ItemAdmin(admin.ModelAdmin):
     list_display = ["name", "get_stock", "created_at"]
-    inlines = [StockInLine]
+    inlines = [StockInline]
 
     def get_stock(self, obj):
         stock = Stock.objects.filter(item=obj).first()

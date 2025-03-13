@@ -2,22 +2,26 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-# .env の読み込み
+# .env の読み込み（ローカル用）
 load_dotenv()
 
+# プロジェクトのベースディレクトリ
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.getenv("SECRET_KEY", "default-key")
+# セキュリティキー（ローカルはテスト用でもOK）
+SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-default")
 
+# デバッグモード（ローカルはTrue、本番はFalse）
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
-# ALLOWED_HOSTS をスペース区切りで取得
+# アクセス許可するホスト名
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1 localhost").split()
 
-# ストライプのキー
+# Stripe APIキー（ローカルはテスト用キー、今回は本番もテストキーにしてある。）
 STRIPE_PUBLIC_KEY = os.getenv("STRIPE_PUBLIC_KEY", "")
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY", "")
 
+# インストールされるアプリケーション
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -25,9 +29,10 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "base",
+    "base",  # ここにアプリ名を入れる
 ]
 
+# ミドルウェア
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -40,10 +45,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "jibie_ec.urls"
 
+# テンプレート設定
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "templates"],
+        "DIRS": [BASE_DIR / "templates"],  # テンプレートディレクトリ
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -58,7 +64,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "jibie_ec.wsgi.application"
 
-# ✅ 本番環境用データベース設定（環境変数から取得）
+# ✅ データベース設定（ローカルは SQLite でOK）
 DATABASES = {
     "default": {
         "ENGINE": os.getenv("DB_ENGINE", "django.db.backends.sqlite3"),
@@ -70,6 +76,7 @@ DATABASES = {
     }
 }
 
+# パスワードバリデータ
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
@@ -77,42 +84,43 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
+# ロケール
 LANGUAGE_CODE = "ja"
-
 TIME_ZONE = "Asia/Tokyo"
-
 USE_I18N = True
 USE_TZ = True
 
+# 認証設定
 LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/index/"
 LOGOUT_REDIRECT_URL = "/login/"
 
-# ✅ 本番環境向けのスタティックファイル設定
+# スタティックファイルとメディアファイル（ローカルと本番で同じでOK）
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
+# カスタムユーザーモデル
 AUTH_USER_MODEL = "base.User"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# ✅ セキュリティ設定
-SESSION_COOKIE_SECURE = False  # 本番環境では絶対True
-CSRF_COOKIE_SECURE = False  # 同じく
-X_FRAME_OPTIONS = "DENY"  # クリックジャッキング対策
+# セキュリティ（ローカルはセキュアをOFF）
+SESSION_COOKIE_SECURE = False  # 本番は True にする
+CSRF_COOKIE_SECURE = False     # 本番は True にする
+X_FRAME_OPTIONS = "DENY"
 
-# ✅ メール設定（注文確認メール用）
+# メール送信（ローカルは設定済み or ダミー）
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.gmail.com")
-EMAIL_PORT = os.getenv("EMAIL_PORT", "587")
+EMAIL_PORT = int(os.getenv("EMAIL_PORT", "587"))
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
 
-# ✅ ログ設定（エラーを記録する）
+# ログ設定（ローカルはファイルにエラーを書き出す）
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -120,7 +128,7 @@ LOGGING = {
         "file": {
             "level": "ERROR",
             "class": "logging.FileHandler",
-            "filename": BASE_DIR / "logs/error.log",
+            "filename": BASE_DIR / "logs/error.log",  # ログファイル出力先
         },
     },
     "loggers": {

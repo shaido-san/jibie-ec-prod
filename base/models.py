@@ -3,6 +3,9 @@ from django.contrib.auth.models import AbstractUser
 
 def upload_image_to(instance, filename):
     return f"images/{filename}"
+
+# 
+
 class User(AbstractUser):
     email = models.EmailField(unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -20,6 +23,7 @@ class User(AbstractUser):
         blank=True
     )
 
+# 注文時に使用する住所モデル（ユーザー情報とは別管理）
 class Address(models.Model):
     # user_idを外部キーに設定し、userが消えたらアドレスも消える設定
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -34,6 +38,7 @@ class Address(models.Model):
         return f"{self.name} ({self.post_code}) - {self.address}" 
 
 
+# 商品情報モデル
 class Item(models.Model):
     name = models.CharField(max_length=100)
     image = models.ImageField(upload_to=upload_image_to, blank=True, null=True)
@@ -51,12 +56,15 @@ class Item(models.Model):
     def tax_price(self):
         return int(self.price * 1.1)
 
+# 在庫情報モデル（Item と 1:1の関係）
 class Stock(models.Model):
-    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    item = models.OneToOneField(Item, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
 
+    def __str__(self):
+        return f"{self.item.name} - {self.quantity}個"
 
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
