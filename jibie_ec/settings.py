@@ -64,7 +64,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "jibie_ec.wsgi.application"
 
-# ✅ データベース設定（ローカルは SQLite でOK）
+# データベース設定（ローカルは SQLite でOK）
 DATABASES = {
     "default": {
         "ENGINE": os.getenv("DB_ENGINE", "django.db.backends.sqlite3"),
@@ -101,6 +101,10 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+STATICFILES_DIRS = [
+    BASE_DIR / "static",  
+]
 
 # カスタムユーザーモデル
 AUTH_USER_MODEL = "base.User"

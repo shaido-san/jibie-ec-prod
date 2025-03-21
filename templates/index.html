@@ -1,12 +1,8 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>商品一覧ページ</title>
-</head>
-<body>
-    <header>
+{% extends "common/base.html" %}
+
+{% block title %}商品一覧ページ{% endblock %}
+
+{% block content %}
         {% if user.is_authenticated %}
           <form action="{% url 'logout' %}" method="post">
             {% csrf_token %}
@@ -36,5 +32,4 @@
           </li>
         {% endfor %}
     </ul>
-</body>
-</html>
+{% endblock %}
