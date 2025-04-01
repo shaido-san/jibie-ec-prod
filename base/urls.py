@@ -2,7 +2,7 @@ from django.urls import path
 from .views import(
     register, CustomLoginView, CustomLogoutView, index,
     item_detail, cart, add_to_cart, remove_from_cart, add_address,
-    checkout, success, order_history
+    checkout, success, order_history, update_cart_quantity
 )
 
 urlpatterns = [
@@ -18,5 +18,5 @@ urlpatterns = [
     path("checkout", checkout, name="checkout"),
     path("success/", success, name="success"),
     path("order-history/", order_history, name="order_history"),
-    
+    path("cart/update/<int:item_id>/", update_cart_quantity, name='update_cart_quantity'),
 ]

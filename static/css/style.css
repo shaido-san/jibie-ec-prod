@@ -1,24 +1,24 @@
 body {
-    font-family: sans-self;
+    font-family: sans-serif;
 }
 
-header, footer{
-    background-color: #333;
-    color: #fff;
-    padding: 10px;
+header, footer {
+    background-color: #333;  /* 背景を暗いグレーに */
+    color: #fff;             /* 文字の色を白に */
+    padding: 10px;           /* 内側の余白を10pxに */
 }
 
 nav ul {
-    display: flex;
-    list-style: none;
-    padding: 0;
+    display: flex;          /* リストを横並びにする */
+    list-style: none;       /* ・などのマーカーを消す */
+    padding: 0;             /* 上下左右の余白なし */
 }
 
 nav ul li{
-    margin-right: 10px;
+    margin-right: 10px;     /* 各メニュー項目の間に余白を入れる */
 }
 
-nav ul li a{
-    color: #fff;
-    text-decoration: none;
+nav ul li a {
+    color: #fff;              /* リンクの文字色を白に */
+    text-decoration: none;   /* 下線を消す */
 }

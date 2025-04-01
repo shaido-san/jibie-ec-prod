@@ -278,3 +278,39 @@ def order_history(request):
     orders = Order.objects.filter(user=user).order_by("-created_at")
     return render(request, "order_history.html", {"orders": orders})
 
+@login_required
+def update_cart_quantity(request, item_id):
+    user = request.user
+    item = get_object_or_404(Item, id=item_id)
+
+    # 該当する商品を取得するクエリ
+    cart_item = Cart.objects.filter(user=user, item=item).first()
+
+    if not cart_item:
+        messages.error(request, "カートにその商品はありません")
+        return redirect("cart")
+    
+    action = request.POST.get("action")
+
+    # 現在の在庫を取得
+    stock_entry = Stock.objects.filter(item=item).first()
+    available_stock = stock_entry.quantity if stock_entry else 0
+    if action == "increase":
+        # 在庫をチェックしてあったら追加できる
+        if cart_item.quantity + 1 > available_stock:
+            messages.error(request, "在庫数を超えております。商品の個数を追加できません。")
+        else:
+            cart_item.quantity += 1
+            cart_item.save()
+            messages.success(request, f"{item.name}の数量を1つ増やしました")
+        
+    elif action == "decrease":
+        if cart_item.quantity > 1:
+            cart_item.quantity -= 1
+            cart_item.save()
+            messages.success(request, f"{item.name}の数量を1つ減らしました。")
+        else:
+            cart_item.delete()
+            messages.success(request, f"{item.name}をカートから削除しました")
+        
+    return redirect("cart")

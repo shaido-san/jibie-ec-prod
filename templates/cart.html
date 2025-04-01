@@ -25,6 +25,14 @@
         {% endif %}
         <p>価格: {{ cart_item.item.tax_price }}円(税込)</p>
         <p>個数: {{ cart_item.quantity }}</p>
+        <form action="{% url 'update_cart_quantity' cart_item.item.id %}" method="post" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" name="action" value="decrease">-</button>
+        </form>
+        <form action="{% url 'update_cart_quantity' cart_item.item.id %}" method="post" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" name="action" value="increase">+</button>
+        </form>
         <p>小計: {{ cart_item.subtotal }}円</p>
         <a href="{% url 'remove_from_cart' cart_item.item.id %}">商品をカートから削除する</a>
       {% endfor %}
