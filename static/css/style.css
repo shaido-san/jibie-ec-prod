@@ -6,19 +6,42 @@ header, footer {
     background-color: #333;  /* 背景を暗いグレーに */
     color: #fff;             /* 文字の色を白に */
     padding: 10px;           /* 内側の余白を10pxに */
+    text-align: center;
 }
 
-nav ul {
-    display: flex;          /* リストを横並びにする */
-    list-style: none;       /* ・などのマーカーを消す */
-    padding: 0;             /* 上下左右の余白なし */
+.header-container {
+    display: flex;
+    justify-content: space-between;  /* 左右に要素を分ける */
+    align-items: center;             /* 縦位置を中央に揃える */
 }
 
-nav ul li{
-    margin-right: 10px;     /* 各メニュー項目の間に余白を入れる */
+.site-title {
+    margin: 0;
+    font-size: 1.5rem;
 }
 
-nav ul li a {
-    color: #fff;              /* リンクの文字色を白に */
-    text-decoration: none;   /* 下線を消す */
+nav.nav-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex: 1;
+}
+
+.nav-list {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 20px;
+}
+
+.nav-list li a {
+    color: white;
+    text-decoration: none;
+}
+
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
 }

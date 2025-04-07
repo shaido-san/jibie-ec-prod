@@ -1,35 +1,33 @@
 {% extends "common/base.html" %}
 
-{% block title %}商品一覧ページ{% endblock %}
-
 {% block content %}
-        {% if user.is_authenticated %}
-          <form action="{% url 'logout' %}" method="post">
-            {% csrf_token %}
-            <button type="submit">ログアウトする</button>
-          </form>
-        {% endif %}
-        {% if messages %}
-        <ul>
-            {% for message in messages %}
-            <li>{{ message }}</li>
-            {% endfor %}
-        </ul> 
-        {% endif %}
-    </header>
-    <h1>商品一覧</h1>
+  {% if user.is_authenticated %}
+    <form action="{% url 'logout' %}" method="post">
+      {% csrf_token %}
+      <button type="submit">ログアウトする</button>
+    </form>
+  {% endif %}
+  {% if messages %}
     <ul>
-        {% for item in items %}
-          <li>
-            <h2>{{ item.name }}</h2>
-            <h3>価格:{{ item.tax_price }}円(税込)</h3>
-            {% if item.image %}
-              <img src="{{ item.image.url }}" alt="{{ item.name}}" width="200">
-            {% else %}
-              <p>イメージ画像はありません</p>
-            {% endif %}
-            <p><a href="/item/{{ item.id }}/">商品詳細を見る</a></p>
-          </li>
-        {% endfor %}
-    </ul>
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+    </ul> 
+  {% endif %}
+
+  <h1>商品一覧</h1>
+  <ul>
+    {% for item in items %}
+      <li>
+        <h2>{{ item.name }}</h2>
+        <h3>価格:{{ item.tax_price }}円(税込)</h3>
+        {% if item.image %}
+          <img src="{{ item.image.url }}" alt="{{ item.name}}" width="200">
+        {% else %}
+          <p>イメージ画像はありません</p>
+        {% endif %}
+        <p><a href="/item/{{ item.id }}/">商品詳細を見る</a></p>
+      </li>
+    {% endfor %}
+  </ul>
 {% endblock %}
