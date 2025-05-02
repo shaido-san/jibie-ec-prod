@@ -1,0 +1,14 @@
+【新しい注文がありました】
+
+注文者: {{ user.username }}
+合計金額: ¥{{ total_price }}
+
+【注文商品一覧】
+{% for item in order_items %}
+- {{ item.item.name }} x{{ item.quantity }}（小計: ¥{{ item.subtotal_price }}）
+{% endfor %}
+
+送付先:
+〒{{ address.postal_code }}
+{{ address.prefecture }}{{ address.city }}{{ address.address }}
+{{ address.recipient_name }} 様
