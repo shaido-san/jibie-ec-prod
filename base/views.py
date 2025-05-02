@@ -8,6 +8,8 @@ from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm, AddressForm
 from .models import Item, Cart, Stock, Order, OrderItem, Address
 from django.db import transaction
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
 
 def register(request):
     if request.method == "POST":
@@ -251,6 +253,22 @@ def success(request):
         messages.error(request, "注文処理中にエラーが発生しました")
         return redirect("cart")
     
+    # 注文が確定する時に管理者にメールを送信する
+    subject = "【注文通知】新しい注文がありました"
+    message = render_to_string("emails/order_notification.txt", {
+        "user":user,
+        "order": order,
+        "order_items": order.orderitem_set.all(),
+        "address": address,
+        "total_price": total_price,
+    })
+    send_mail(
+        subject,
+        message,
+        settings.DEFAULT_FROM_EMAIL,
+        [settings.ADMIN_EMAIL],
+        fail_silently=False,
+    )
     messages.success(request, "ご注文ありがとうございます。注文が確定しました。")
     return render(request, "success.html",{"order":order})
 

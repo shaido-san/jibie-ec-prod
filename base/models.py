@@ -48,6 +48,8 @@ class Item(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
 
+    def __str__(self):
+        return f"商品: {self.name}"
     # templatesのitem_detailで呼び出している
     def get_stock(self):
         stock_entry = Stock.objects.filter(item=self).first()
