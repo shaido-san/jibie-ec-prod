@@ -1,6 +1,9 @@
 from django.test import TestCase
 from django.urls import reverse
-from base.models import Item
+from django.contrib.messages import get_messages
+from base.models import Item, Stock, Cart
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 __all__ = ["TestIndexView"]
 
@@ -37,6 +40,46 @@ class TestIndexView(TestCase):
             transform=lambda x: x.name,
             ordered=False
         )
+    
+    # item_detailビューがアイテム（商品）をテンプレートに渡しているか確認
+    def test_item_detail_view_status_code(self):
+        item = Item.objects.create(name="テスト商品", price=4000, information="テストです。")
+        response = self.client.get(reverse("item_detail", args=[item.id]))
+        self.assertEqual(response.status_code, 200)
+    
+    # コンテキストにitemが含まれているかのテスト
+    def test_item_detail_view_context_contains_item(self):
+        item = Item.objects.create(name="テスト商品", price=7000, information="テストの説明")
+        response = self.client.get(reverse("item_detail", args=[item.id]))
+        self.assertIn("item", response.context)
+        self.assertEqual(response.context["item"], item)
+    
+    def test_item_detail_view_stock_item_range(self):
+        item = Item.objects.create(name="テスト商品", price=6000, information="テストの商品です")
+        Stock.objects.create(item=item, quantity=5)
 
+        response = self.client.get(reverse("item_detail", args=[item.id]))
 
-        
+        self.assertIn("stock_item_range", response.context)
+        self.assertEqual(list(response.context["stock_item_range"]), list(range(1, 6)))
+    
+    def test_add_to_cart_adds_item_to_session(self):
+        user = User.objects.create_user(username="testuser", password="password")
+        self.client.login(username="testuser", password="password")
+
+        item = Item.objects.create(name="テスト商品", price=8000, information="テストです")
+        Stock.objects.create(item=item, quantity=10)
+
+        response = self.client.post(
+            reverse("add_to_cart", args=[item.id]),
+            {"quantity": 2},
+            follow=True
+        )
+
+        # DBにCartオブジェクトが存在するか確認
+        cart_item = Cart.objects.get(user=user, item=item)
+        self.assertEqual(cart_item.quantity, 2)
+
+        # メッセージの確認
+        messages = list(get_messages(response.wsgi_request))
+        self.assertTrue(any("カートに商品を追加しました" in str(message) for message in messages))
