@@ -63,19 +63,6 @@ def cart(request):
 @login_required   
 def add_to_cart(request, item_id):
 
-# 辞書型の中の辞書の構造になっている。例が下になる。また、ここではカートに商品を入れた時に、まだStockテーブルの更新は行わない。
-#     cart = {
-#     "1": {
-#         "name": "鹿肉セット",
-#         "price": 5000,
-#         "quantity": 2
-#     },
-#     "2": {
-#         "name": "猪肉ステーキ",
-#         "price": 3000,
-#         "quantity": 1
-#     }
-# }
     item = get_object_or_404(Item, id=item_id)
     user = request.user
 
