@@ -30,10 +30,13 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "base",  # ここにアプリ名を入れる
+    "rest_framework", # インストールしたdjangoのrestフレームワーク
+    "corsheaders",
 ]
 
 # ミドルウェア
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -145,3 +148,4 @@ LOGGING = {
         },
     },
 }
+CORS_ALLOW_ALL_ORIGINS = True

@@ -4,6 +4,7 @@ from .views import(
     item_detail, cart, add_to_cart, remove_from_cart, add_address,
     checkout, success, order_history, update_cart_quantity
 )
+from base.views import ItemDetailAPIView
 
 urlpatterns = [
     path("register/", register, name="register"),
@@ -19,4 +20,5 @@ urlpatterns = [
     path("success/", success, name="success"),
     path("order-history/", order_history, name="order_history"),
     path("cart/update/<int:item_id>/", update_cart_quantity, name='update_cart_quantity'),
+    path('api/items/<int:pk>/', ItemDetailAPIView.as_view(), name='item-detail-api'),
 ]

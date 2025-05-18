@@ -10,6 +10,12 @@ from .models import Item, Cart, Stock, Order, OrderItem, Address
 from django.db import transaction
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
+from rest_framework.generics import RetrieveAPIView
+from .serializers import ItemSerializer
+
+class ItemDetailAPIView(RetrieveAPIView):
+    queryset = Item.objects.filter(is_published=True)
+    serializer_class = ItemSerializer
 
 def register(request):
     if request.method == "POST":
@@ -319,3 +325,4 @@ def update_cart_quantity(request, item_id):
             messages.success(request, f"{item.name}をカートから削除しました")
         
     return redirect("cart")
+
