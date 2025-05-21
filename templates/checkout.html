@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>注文確認ページ</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>注文確認ページ</title>
+  <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
+  <div class="checkout-container">
+
     <h1>カートの内容</h1>
     {% for cart_item in cart_items %}
       <p>{{ cart_item.item.name }} - {{ cart_item.quantity }}個 - {{ cart_item.item.tax_price }}円(税込)</p>
@@ -15,24 +18,28 @@
 
     <h2>送付先を選択</h2>
     <p><a href="{% url 'add_address' %}">新しい住所を登録する</a></p>
-<form method="POST">
-    {% csrf_token %}
 
-    {% if addresses %}
-      <h3>登録済みの住所</h3>
-        {% for address in addresses %}
-          <label>
-            <input type="radio" name="address_id" value="{{ address.id }}"> 
-            〒{{ address.post_code }} {{ address.address }}（{{ address.name }} - {{ address.telephone_number }}）
-          </label><br>
-        {% endfor %}
-    {% else %}
+    <form method="POST">
+      {% csrf_token %}
+
+      {% if addresses %}
+        <h3>登録済みの住所</h3>
+        <div class="address-list">
+          {% for address in addresses %}
+            <label class="address-option">
+              <input type="radio" name="address_id" value="{{ address.id }}">
+              〒{{ address.post_code }} {{ address.address }}（{{ address.name }} - {{ address.telephone_number }}）
+            </label>
+          {% endfor %}
+        </div>
+      {% else %}
         <p>住所が登録されていません。 <a href="{% url 'add_address' %}">住所を登録する</a></p>
-    {% endif %}
+      {% endif %}
 
-    <button type="submit">決済画面へ進む</button>
-</form>
-        
-    <a href="{% url 'cart' %}">カートに戻る</a>
+      <button type="submit" class="checkout-button">決済画面へ進む</button>
+    </form>
+
+    <p><a href="{% url 'cart' %}">カートに戻る</a></p>
+  </div>
 </body>
 </html>

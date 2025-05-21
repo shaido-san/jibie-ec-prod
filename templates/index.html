@@ -7,27 +7,29 @@
       <button type="submit">ログアウトする</button>
     </form>
   {% endif %}
+
   {% if messages %}
     <ul>
       {% for message in messages %}
         <li>{{ message }}</li>
       {% endfor %}
-    </ul> 
+    </ul>
   {% endif %}
 
   <h1>商品一覧</h1>
-  <ul>
+
+  <div class="product-list">
     {% for item in items %}
-      <li>
+      <div class="product-item">
         <h2>{{ item.name }}</h2>
         <h3>価格:{{ item.tax_price }}円(税込)</h3>
         {% if item.image %}
-          <img src="{{ item.image.url }}" alt="{{ item.name}}" width="200">
+          <img src="{{ item.image.url }}" alt="{{ item.name }}" width="200">
         {% else %}
           <p>イメージ画像はありません</p>
         {% endif %}
         <p><a href="/item/{{ item.id }}/">商品詳細を見る</a></p>
-      </li>
+      </div>
     {% endfor %}
-  </ul>
+  </div>
 {% endblock %}
