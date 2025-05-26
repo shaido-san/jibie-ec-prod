@@ -349,3 +349,47 @@ main {
         margin: 20px auto;
     }
 }
+
+/* --- 追加スタイル（通販サイト風の改善） --- */
+
+/* リンクホバー時に下線と明るさ */
+.nav-list li a:hover {
+    text-decoration: underline;
+    filter: brightness(1.2);
+}
+
+/* ボタンにホバーアニメーション追加 */
+button:hover, 
+.address-form button:hover, 
+.checkout-button:hover, 
+.button-link:hover {
+    background-color: #444;
+    transform: scale(1.02);
+    transition: all 0.2s ease-in-out;
+}
+
+/* ページ全体の背景色を淡いグレーに */
+body {
+    background-color: #f7f7f7;
+}
+
+/* フッターを中央寄せしつつ上下に余白 */
+footer {
+    text-align: center;
+    padding: 20px 0;
+    font-size: 0.9rem;
+    background-color: #333;
+    color: white;
+}
+
+/* 商品タイトルと価格を強調 */
+.product-item h2 {
+    font-size: 1.3rem;
+    color: #333;
+}
+
+.product-item p.price {
+    font-size: 1.4rem;
+    color: #e60023;
+    font-weight: bold;
+}
