@@ -9,6 +9,6 @@
 {% endfor %}
 
 送付先:
-〒{{ address.postal_code }}
-{{ address.prefecture }}{{ address.city }}{{ address.address }}
-{{ address.recipient_name }} 様
+〒{{ address.post_code }}
+{{ address.address }}
+{{ address.name }} 様

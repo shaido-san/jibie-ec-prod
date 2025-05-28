@@ -187,7 +187,6 @@ def success(request):
     user = request.user
     address_id = request.GET.get("address_id")
     
-    # 住所がない場合はエラーを出す
     if not address_id:
         messages.error(request, "住所を指定してください。")
         return redirect("cart")
@@ -195,7 +194,6 @@ def success(request):
     address = get_object_or_404(Address, id=address_id, user=user)
     cart_items = Cart.objects.filter(user=user)
 
-    # カートが空ならリダイレクト
     if not cart_items.exists():
         messages.error(request, "カートはからです")
         return redirect("cart")
@@ -218,7 +216,6 @@ def success(request):
         messages.error(request, "在庫不足です。やり直しをお願いします。")
         return redirect("cart")
     try:
-        # 注文を確定する。注文ーブルを作り、在庫を減らす処理。
          with transaction.atomic():
              order = Order.objects.create(user=user, address=address, total_price=total_price)
              for cart_item in cart_items:
@@ -228,12 +225,11 @@ def success(request):
                  quantity=cart_item.quantity,
                  subtotal_price=cart_item.item.tax_price() * cart_item.quantity
                  )
-                 # ここで在庫を減らす。
+    
                  stock_entry = Stock.objects.get(item=cart_item.item)
                  stock_entry.quantity -= cart_item.quantity
                  stock_entry.save()
         
-             # 注文を確定後にカートの中身を削除する。逆ではダメ
              cart_items.delete()
     
     except Exception as e:
@@ -319,3 +315,8 @@ def update_cart_quantity(request, item_id):
             messages.success(request, f"{item.name}をカートから削除しました")
         
     return redirect("cart")
+
+@login_required
+def order_history(request):
+    orders = Order.objects.filter(user=request.user).order_by('-created_at')
+    return render(request, 'order_history.html', {'orders': orders})
